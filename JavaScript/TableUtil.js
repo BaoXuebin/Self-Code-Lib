@@ -8,7 +8,7 @@
 var TableUtil = (function() {
 
         var test = function test() {
-            console.log("This is test!");
+            console.log('TableUtil.js 加载成功！');
         };
 
         var collapse = function collapse(params) {

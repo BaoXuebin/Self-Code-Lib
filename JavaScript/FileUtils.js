@@ -8,7 +8,7 @@
 var FileUtils = (function() {
 
     var test = function() {
-        console.log('this is a test!');
+        console.log('FileUtils.js 加载成功！');
     };
 
     /*
@@ -27,18 +27,18 @@ var FileUtils = (function() {
         if ($.inArray(ext, validExts) < 0) {
             alert('文件格式只能为'+ validExts.join(" "));
             var file = $(fileInput);
-            file.after(file.clone().val(""));     
-            file.remove();  
+            file.after(file.clone().val(""));
+            file.remove();
             return;
         } else {
             var fileSize = -1;
             // 浏览器兼容性处理
             if (isIE()) { // IE
-                try{ 
-                    var fso = new ActiveXObject("Scripting.FileSystemObject"); 
-                    fileSize = fso.GetFile(path).size; 
-                }catch(e){ 
-                    alert(e + "\n文件大小未识别，建议文件不超过" + formatSize(maxSize, 2) + "，否则会导致提交失败！"); 
+                try{
+                    var fso = new ActiveXObject("Scripting.FileSystemObject");
+                    fileSize = fso.GetFile(path).size;
+                }catch(e){
+                    alert(e + "\n文件大小未识别，建议文件不超过" + formatSize(maxSize, 2) + "，否则会导致提交失败！");
                 }
             } else {
                 fileSize = $(fileInput)[0].files[0].size;
@@ -46,8 +46,8 @@ var FileUtils = (function() {
             if (fileSize > maxSize) {
                 alert("文件太大（" + formatSize(fileSize, 2) +  "） ，请重新选择文件！" );
                 var file = $(fileInput);
-                file.after(file.clone().val(""));     
-                file.remove(); 
+                file.after(file.clone().val(""));
+                file.remove();
             }
         }
 
@@ -67,7 +67,7 @@ var FileUtils = (function() {
         function isIE() {
             if (!!window.ActiveXObject || "ActiveXObject" in window)
                 return true;
-            else 
+            else
                 return false;
         }
     };

@@ -7,6 +7,7 @@
 <script type="text/javascript" src="base-js/jquery-1.12.1.js"></script>
 <script type="text/javascript" src="FileUtils.js"></script>
 <script type="text/javascript" src="TableUtil.js"></script>
+<script type="text/javascript" src="ButtonUtil.js"></script>
 </head>
 <body>
 <div style="margin: 10% 15%;">
@@ -38,6 +39,10 @@
             </td>
         </tr>
     </table>
+
+    <h2>3、倒计时按钮</h2>
+    button： <button class="timer">测试</button></br>
+    input[button]： <input type="button" class="timer" value="测试" />
 </div>
 <script>
     $(function() {
@@ -47,6 +52,18 @@
             // height: 80, // 默认 80，不要带 px
             // openStr: '', // 默认文字 展开
             // closeStr: '' // 默认文字 收起
+        });
+
+        ButtonUtil.timer({
+            selector: '.timer',
+            excText: '重新发送({+})', // 倒计时过程中按钮显示文本
+            preFunc: function() {
+                console.log('由于浏览器的单线程机制，为了保证代码的正确执行，方法体中禁止使用 alert 方法');
+            },  // 计时前要调用的方法
+            afterFunc: function() {
+
+            }, // 计时后要调用的方法
+            debug: true // 是否开启调试，开启后，控制台将会打印相关信息
         });
     });
 </script>
