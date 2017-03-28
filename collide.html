@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        canvas {
+            /*width: 500px;*/
+            /*height: 500px;*/
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<script src="//cdn.bootcss.com/babel-core/5.8.30/browser.min.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/babel">
+    // 工具类
+    class MathUtil {
+        static log() {
+            console.log('This is a too class!');
+        }
+
+        static gradient(p1, p2) {
+            if (p1.x === p2.x) {
+                return null;
+            }
+            return (p2.y - p1.y)/(p2.x - p2.y);
+        }
+
+        static intercept(k, point) {
+            if (k) {
+                return point.y - k * point.x;
+            } else {
+                return point.x;
+            }
+        }
+
+        static touch(range1, range2) {
+            return range1.min <= range2.max && range1.max >= range2.min;
+        }
+
+    }
+
+    // 点
+    class Point {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        toString() {
+            return `[${this.x}, ${this.y}]`;
+        }
+    }
+
+    // 多边形
+    class Polygon {
+        constructor(points) {
+            if (points) {
+                this.points = points;
+            } else {
+                this.points = [];
+            }
+        }
+
+        toString() {
+            let logInfo = '';
+            for (let point of this.points) {
+                logInfo += point.toString() + ", ";
+            }
+            console.log(`Polygon: ${logInfo}`);
+        }
+
+        // 添加点
+        addPoint(p) {
+            this.points.push(p);
+            return this;
+        }
+
+        illuminatRange(k) {
+            let min = null;
+            let max = null;
+
+            for (let point of this.points) {
+                let intercept = MathUtil.intercept(k, point);
+                if (min == null || intercept < min) {
+                    min = intercept;
+                }
+                if (max == null || intercept > max) {
+                    max = intercept;
+                }
+            }
+
+            return {
+                min: min,
+                max: max
+            };
+        }
+
+        isCollided(polygon) {
+            if (polygon == null)
+                return false;
+
+            for (let i = 0, l = this.points.length; i < l; i ++ ){
+                let k = null;
+                if (i === l - 1) {
+                    k = MathUtil.gradient(this.points[i], this.points[0]);
+                } else {
+                    k = MathUtil.gradient(this.points[i], this.points[i+1]);
+                }
+
+                let range1 = this.illuminatRange(k);
+                let range2 = polygon.illuminatRange(k);
+
+                // 如果未相交，说明未碰撞，返回 false
+                if (!MathUtil.touch(range1, range2))
+                    return false;
+            }
+
+            return true;
+        }
+    }
+
+    class Main {
+        static main() {
+            let polygon = new Polygon();
+            polygon.addPoint(new Point(0,0))
+                .addPoint(new Point(0,1))
+                .addPoint(new Point(1,0));
+
+            let polygon2 = new Polygon();
+            polygon2.addPoint(new Point(2,0))
+                .addPoint(new Point(2,1))
+                .addPoint(new Point(3,1))
+                .addPoint(new Point(3,0));
+
+            polygon.toString();
+            polygon2.toString();
+
+            console.log(polygon.isCollided(polygon2));
+        }
+    }
+
+    Main.main();
+
+
+</script>
+</body>
+</html>
