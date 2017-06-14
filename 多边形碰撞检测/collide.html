@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {padding: 0; margin: 0;}
+        body {background-color: black;}
+        .canvas-container {width: 800px; height: 490px; margin: 30px auto; margin-bottom: 30px; border: 1px solid pink;}
+        canvas {border-color: white;}
+        .action-bar {width: 600px; margin: 20px auto;}
+        .action-bar button {padding: 2px 4px;}
+        .action-bar span {color: white;}
+    </style>
+</head>
+<body>
+
+    <div class="canvas-container"></div>
+    <div class="action-bar">
+        <div>
+            <span>添加：</span>
+            <button>三角形</button>
+            <button class="add-rectangle">四边形</button>
+            <button>五边形</button>
+            <button>六边形</button>
+            <button>圆</button>
+            <span>四叉树优化：</span><input type="checkbox" class="isQuadTree"/>
+        </div>
+        <div>
+            <span>减少：</span>
+            <button>三角形</button>
+            <button class="reduce-rectangle">四边形</button>
+            <button>五边形</button>
+            <button>六边形</button>
+            <button>圆</button>
+            <span>信息显示：</span><input type="checkbox" class="isShowInfo" checked/>
+        </div>
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./lib/Polygon.js"></script>
+    <script src="./lib/Polygon-impl.js"></script>
+    <script src="./lib/QuadTree.js"></script>
+    <script src="./lib/MathUtil.js"></script>
+    <script src="./lib/Utils.js"></script>
+    <script src="./lib/main.js"></script>
+</body>
+</html>
