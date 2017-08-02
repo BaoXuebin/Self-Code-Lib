@@ -33,6 +33,7 @@ var JY_CAPTCHA = (function() {
         console.log('jyCaptcha.js 加载成功！');
     };
 
+    var captchaObjHtml = null;
     var global_debug = false;
 
     var selflog = function selflog(text, type) {
@@ -87,7 +88,7 @@ var JY_CAPTCHA = (function() {
 
         selflog('验证码容器构建完成：' + _params['containerId']);
 
-        _params['beforeFunc'] = params.brefore;
+        _params['beforeFunc'] = params.before;
         _params['successFunc'] = params.success;
         _params['showMode'] = params.showMode || 'float';
         if (params.form instanceof jQuery) {
@@ -111,45 +112,40 @@ var JY_CAPTCHA = (function() {
             // 成功的回调
             captchaObj.onSuccess(function () {
                 var validate = captchaObj.getValidate();
-                $.ajax({
-                    url: "pc-geetest/validate", // 进行二次验证
-                    type: "post",
-                    dataType: "json",
-                    data: {
-                        geetest_challenge: validate.geetest_challenge,
-                        geetest_validate: validate.geetest_validate,
-                        geetest_seccode: validate.geetest_seccode
-                    },
-                    success: function (data) {
-                        selflog('极验二次验证完成，获取到返回值：\n' + data);
+                var obj = {
+                    geetest_challenge: validate.geetest_challenge,
+                    geetest_validate: validate.geetest_validate,
+                    geetest_seccode: validate.geetest_seccode
+                };
 
-                        if (_successFunc) {
-                            selflog('极验验证完成，成功执行 success 方法');
-                            _successFunc(data);
-                        } else {
-                        	selflog('极验验证完成，未执行任何方法');
-                        }
-                    }
-                });
-            });
-
-            // 绑定按钮的点击事件
-            _$trigger.each(function() {
-                $(this).on('click', function() {
-                    if (!_beforeFunc || _beforeFunc && _beforeFunc()) {
-                        captchaObj.show();
-                    } else {
-                        selflog('before 方法返回 false , 极验未初始化');
-                    }
-                });
-
-                selflog($(this) + '成功绑定点击事件');
+                if (_successFunc) {
+                    selflog('极验验证完成，成功执行 success 方法');
+                    _successFunc(obj);
+                } else {
+                    selflog('极验验证完成，未执行任何方法');
+                }
             });
 
             // 将验证码加到id为captcha的元素里
             captchaObj.appendTo(_containerId);
             selflog('极验初始化完成');
+
+            // 显示验证码
+            captchaObj.show();
         };
+
+        // 绑定按钮的点击事件
+        _$trigger.each(function() {
+            $(this).unbind('click').on('click', function() {
+                if (!_beforeFunc || _beforeFunc && _beforeFunc()) {
+                    init('popup', handlerPopupFunc);
+                } else {
+                    selflog('before 方法返回 false , 极验未初始化');
+                }
+            });
+
+            selflog($(this) + '成功绑定点击事件');
+        });
 
         init('popup', handlerPopupFunc);
     };
@@ -225,4 +221,4 @@ var JY_CAPTCHA = (function() {
 })();
 
 
-JY_CAPTCHA.test();
+// JY_CAPTCHA.test();
